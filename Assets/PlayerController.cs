@@ -7,13 +7,12 @@ public class PlayerController : NetworkBehaviour
 	public Transform bulletSpawn;
 	public GameObject myCam;
 
-    public float speed = 10.0f;
-    public float gravity = 10.0f;
-    public float maxVelocityChange = 10.0f;
-    public bool canJump = true;
-    public float jumpHeight = 2.0f;
-    private bool grounded = false;
+    public float speed = 6.0F;
+    public float jumpSpeed = 8.0F;
+    public float gravity = 20.0F;
+    public cam[] Cam;
 
+    private Vector3 moveDirection = Vector3.zero;
     void Awake()
     {
         GetComponent<Rigidbody>().freezeRotation = true;
@@ -26,47 +25,31 @@ public class PlayerController : NetworkBehaviour
 			return;
 		}
 
-		myCam.GetComponent<Camera>().enabled=true;
-
-        if (grounded){
-            // Calculate how fast we should be moving
-            Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            targetVelocity = transform.TransformDirection(targetVelocity);
-            targetVelocity *= speed;
-
-            // Apply a force that attempts to reach our target velocity
-            Vector3 velocity = GetComponent<Rigidbody>().velocity;
-            Vector3 velocityChange = (targetVelocity - velocity);
-            velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-            velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-            velocityChange.y = 0;
-            GetComponent<Rigidbody>().AddForce(velocityChange, ForceMode.VelocityChange);
-
-            // Jump
-            if (canJump && Input.GetButton("Jump")){
-                GetComponent<Rigidbody>().velocity = new Vector3(velocity.x, CalculateJumpVerticalSpeed(), velocity.z);
-            }
+        foreach (cam item in Cam)
+        {
+            item.enabled = true;
         }
 
-        // We apply gravity manually for more tuning control
-        GetComponent<Rigidbody>().AddForce(new Vector3(0, -gravity * GetComponent<Rigidbody>().mass, 0));
+        myCam.GetComponent<Camera>().enabled=true;
 
-        grounded = false;
+        CharacterController controller = GetComponent<CharacterController>();
+        if (controller.isGrounded)
+        {
+            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            moveDirection = transform.TransformDirection(moveDirection);
+            moveDirection *= speed;
+            if (Input.GetButton("Jump"))
+                moveDirection.y = jumpSpeed;
 
-
+        }
+        moveDirection.y -= gravity * Time.deltaTime;
+        controller.Move(moveDirection * Time.deltaTime);
+    
         if (Input.GetMouseButtonDown(0)){
 			CmdFire();
 		}
 	}
 
-    void OnCollisionStay(){
-        grounded = true;
-    }
-
-    float CalculateJumpVerticalSpeed(){
-        return Mathf.Sqrt(2 * jumpHeight * gravity);
-    }
-    
     [Command]
 	void CmdFire(){
 		var bullet = (GameObject)Instantiate(

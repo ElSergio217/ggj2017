@@ -80,13 +80,14 @@ GameObject:
   m_Component:
   - component: {fileID: 466224}
   - component: {fileID: 3335672}
-  - component: {fileID: 13631946}
   - component: {fileID: 2369878}
   - component: {fileID: 11474170}
   - component: {fileID: 11440102}
   - component: {fileID: 11405546}
   - component: {fileID: 54935093147272252}
-  - component: {fileID: 114545422442126720}
+  - component: {fileID: 143882643528944044}
+  - component: {fileID: 114290856931429692}
+  - component: {fileID: 114526353471740152}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -123,7 +124,7 @@ GameObject:
   - component: {fileID: 12427778}
   - component: {fileID: 9255366}
   - component: {fileID: 8194988}
-  - component: {fileID: 114458101489672244}
+  - component: {fileID: 114696219439263810}
   m_Layer: 0
   m_Name: Camera (1)
   m_TagString: Untagged
@@ -230,7 +231,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 164032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.910164, y: -1.8498442, z: 0.8608228}
+  m_LocalPosition: {x: 0.27668142, y: 1.28, z: 0.67998934}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 433460}
@@ -686,10 +687,11 @@ MonoBehaviour:
   bulletSpawn: {fileID: 461432}
   myCam: {fileID: 182058}
   speed: 10
+  jumpSpeed: 8
   gravity: 10
-  maxVelocityChange: 10
-  canJump: 1
-  jumpHeight: 15
+  Cam:
+  - {fileID: 114290856931429692}
+  - {fileID: 114696219439263810}
 --- !u!114 &11474170
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -729,19 +731,6 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 182058}
   m_Enabled: 1
---- !u!136 &13631946
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 164032}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -778,30 +767,9 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &114458101489672244
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 182058}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d58de8e035541a47a86a2ac89276062, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Axis: 2
-  sensitivityX: 6
-  sensitivityY: 6
-  minimumX: -360
-  maximumX: 360
-  minimumY: -60
-  maximumY: 60
-  rotationX: 0
-  rotationY: 0
-  lookSpeed: 2
---- !u!114 &114545422442126720
+--- !u!114 &114290856931429692
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -809,16 +777,69 @@ MonoBehaviour:
   m_GameObject: {fileID: 164032}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d58de8e035541a47a86a2ac89276062, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d376cca466800a41b4740c384b66ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Axis: 1
+  axes: 1
   sensitivityX: 6
   sensitivityY: 6
   minimumX: -360
   maximumX: 360
   minimumY: -60
   maximumY: 60
-  rotationX: 0
-  rotationY: 0
-  lookSpeed: 2
+  frameCounter: 10
+--- !u!114 &114526353471740152
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 164032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 433460}
+  m_ChildIndex: 0
+  m_SendInterval: 0.033333335
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
+--- !u!114 &114696219439263810
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182058}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d376cca466800a41b4740c384b66ff0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  axes: 2
+  sensitivityX: 6
+  sensitivityY: 6
+  minimumX: -360
+  maximumX: 360
+  minimumY: -60
+  maximumY: 60
+  frameCounter: 20
+--- !u!143 &143882643528944044
+CharacterController:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 164032}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
